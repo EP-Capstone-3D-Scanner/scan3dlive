@@ -1,5 +1,5 @@
 [submodule "livox_ros2_driver"]
-	path = src/scan3dlive/src/livox_ros2_driver
+	path = livox_ros2_driver
 	url = https://github.com/Livox-SDK/livox_ros2_driver.git
 [submodule "Livox-SDK"]
 	path = .devcontainer/installation_files/Livox-SDK

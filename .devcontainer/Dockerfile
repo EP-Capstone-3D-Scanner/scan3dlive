@@ -36,13 +36,15 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 ################################
 ## ADD ANY CUSTOM SETUP BELOW ##
 ################################
-RUN mkdir -p /tmp/livox_build/source
-COPY ./installation_files/Livox-SDK /tmp/livox_build/source
+RUN mkdir -p /tmp/scan3dlive_install_files/source
+RUN mkdir -p /tmp/scan3dlive_install_files/build
+COPY ./installation_files /tmp/scan3dlive_install_files/source
 
+# Install Livox-SDK
 RUN set -ex; \
-    cd /tmp/livox_build; \
-    mkdir build; \
-    cd build; \
-    cmake ../source; \
-    make -j$(nproc); \
+    cd /tmp/scan3dlive_install_files/build; \
+    mkdir Livox-SDK; \
+    cd Livox-SDK; \
+    cmake /tmp/scan3dlive_install_files/source/Livox-SDK; \
+    make; \
     sudo make install

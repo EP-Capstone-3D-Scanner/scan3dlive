@@ -62,10 +62,12 @@ RUN sudo apt-get install -y usbutils
 
 RUN sudo apt-get install -y libusb-1.0-0-dev libhidapi-libusb0 libhidapi-dev
 RUN sudo apt-get install -y udev
+
+RUN sudo apt-get install -y libopencv-dev libopencv-viz-dev; \
+
 RUN set -ex; \
     # cd /tmp/scan3dlive_install_files/source/zed-open-capture/udev; \
     # bash install_udev_rule.sh; \
-    sudo apt-get install -y libopencv-dev libopencv-viz-dev; \
     cd /tmp/scan3dlive_install_files/build; \
     mkdir zed-open-capture; \
     cd zed-open-capture; \

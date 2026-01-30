@@ -63,7 +63,7 @@ RUN sudo apt-get install -y usbutils
 RUN sudo apt-get install -y libusb-1.0-0-dev libhidapi-libusb0 libhidapi-dev
 RUN sudo apt-get install -y udev
 
-RUN sudo apt-get install -y libopencv-dev libopencv-viz-dev; \
+RUN sudo apt-get install -y libopencv-dev libopencv-viz-dev
 
 RUN set -ex; \
     # cd /tmp/scan3dlive_install_files/source/zed-open-capture/udev; \
@@ -75,3 +75,11 @@ RUN set -ex; \
     make -j$(nproc); \
     sudo make install; \
     sudo ldconfig
+
+# Install dependencies for r3live
+RUN sudo apt-get install -y libboost-all-dev
+RUN sudo apt-get install -y pcl-tools
+RUN sudo apt-get install -y libcgal-dev
+RUN sudo apt-get install -y ros-humble-cv-bridge
+RUN sudo apt-get install -y ros-humble-pcl-ros
+RUN sudo apt-get install -y libpcap-dev

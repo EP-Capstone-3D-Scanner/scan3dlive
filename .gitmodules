@@ -17,4 +17,5 @@
 	branch = humble
 [submodule "Sophus"]
 	path = .devcontainer/installation_files/Sophus
-	url = https://github.com/strasdat/Sophus.git
+	url = https://github.com/EP-Capstone-3D-Scanner/Sophus.git
+	branch = Sophus-Fixed

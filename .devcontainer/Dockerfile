@@ -85,4 +85,12 @@ RUN set -ex; \
 # RUN sudo apt-get install -y libpcap-dev
 
 RUN sudo apt-get install -y ros-$ROS_DISTRO-pcl-ros
-RUN sudo apt-get install -y ros-$ROS_DISTRO-sophus
+
+# Install Sophus
+RUN set -ex; \
+    cd /tmp/scan3dlive_install_files/build; \
+    mkdir Sophus; \
+    cd Sophus; \
+    cmake /tmp/scan3dlive_install_files/source/Sophus -DCMAKE_POSITION_INDEPENDENT_CODE=ON; \
+    make -j$(nproc); \
+    sudo make install

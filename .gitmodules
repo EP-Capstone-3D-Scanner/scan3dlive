@@ -8,14 +8,14 @@
 [submodule "zed-open-capture"]
 	path = .devcontainer/installation_files/zed-open-capture
 	url = https://github.com/stereolabs/zed-open-capture.git
-[submodule "rpg_vikit"]
-	path = fast-livo2_ws/src/rpg_vikit
-	url = https://github.com/Robotic-Developer-Road/rpg_vikit.git
-[submodule "FAST-LIVO2"]
-	path = fast-livo2_ws/src/FAST-LIVO2
-	url = https://github.com/Robotic-Developer-Road/FAST-LIVO2.git
-	branch = humble
 [submodule "Sophus"]
 	path = .devcontainer/installation_files/Sophus
 	url = https://github.com/EP-Capstone-3D-Scanner/Sophus.git
 	branch = Sophus-Fixed
+[submodule "fast-livo2_ws/src/rpg_vikit"]
+	path = fast-livo2_ws/src/rpg_vikit
+	url = https://github.com/integralrobotics/rpg_vikit.git
+[submodule "fast-livo2_ws/src/FAST-LIVO2"]
+	path = fast-livo2_ws/src/FAST-LIVO2
+	url = https://github.com/Robotic-Developer-Road/FAST-LIVO2.git
+	branch = humble

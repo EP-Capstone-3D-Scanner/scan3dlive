@@ -77,9 +77,12 @@ RUN set -ex; \
     sudo ldconfig
 
 # Install dependencies for r3live
-RUN sudo apt-get install -y libboost-all-dev
-RUN sudo apt-get install -y pcl-tools
-RUN sudo apt-get install -y libcgal-dev
-RUN sudo apt-get install -y ros-humble-cv-bridge
-RUN sudo apt-get install -y ros-humble-pcl-ros
-RUN sudo apt-get install -y libpcap-dev
+# RUN sudo apt-get install -y libboost-all-dev
+# RUN sudo apt-get install -y pcl-tools
+# RUN sudo apt-get install -y libcgal-dev
+# RUN sudo apt-get install -y ros-humble-cv-bridge
+# RUN sudo apt-get install -y ros-humble-pcl-ros
+# RUN sudo apt-get install -y libpcap-dev
+
+RUN sudo apt-get install -y ros-$ROS_DISTRO-pcl-ros
+RUN sudo apt-get install -y ros-$ROS_DISTRO-sophus

@@ -15,3 +15,6 @@
 	path = fast-livo2_ws/src/FAST-LIVO2
 	url = https://github.com/Robotic-Developer-Road/FAST-LIVO2.git
 	branch = humble
+[submodule "Sophus"]
+	path = .devcontainer/installation_files/Sophus
+	url = https://github.com/strasdat/Sophus.git

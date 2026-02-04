@@ -41,6 +41,22 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 # Install Nano to use with Git
 RUN sudo apt-get install -y nano
 
+# Install dependencies before cloning installation files
+## unknown
+RUN sudo apt-get install -y ros-humble-cv-bridge
+RUN sudo apt-get install -y ros-humble-image-transport
+RUN sudo apt-get install -y ros-humble-pcl-ros
+RUN sudo apt-get install -y ros-humble-sophus
+## zed-open-capture
+RUN sudo apt-get install -y usbutils
+RUN sudo apt-get install -y libusb-1.0-0-dev libhidapi-libusb0 libhidapi-dev
+RUN sudo apt-get install -y udev
+RUN sudo apt-get install -y libopencv-dev libopencv-viz-dev
+## ros
+RUN sudo apt-get install -y ros-humble-rviz2
+RUN sudo apt-get install -y ros-humble-rqt*
+
+# Cloning installation files
 RUN mkdir -p /tmp/scan3dlive_install_files/source
 RUN mkdir -p /tmp/scan3dlive_install_files/build
 COPY ./installation_files /tmp/scan3dlive_install_files/source
@@ -67,12 +83,6 @@ RUN set -ex; \
 
 # RUN sudo mkdir -p /etc/udev/rules.d
 # RUN sudo touch /etc/udev/rules.d/99-slabs.rules
-RUN sudo apt-get install -y usbutils
-
-RUN sudo apt-get install -y libusb-1.0-0-dev libhidapi-libusb0 libhidapi-dev
-RUN sudo apt-get install -y udev
-
-RUN sudo apt-get install -y libopencv-dev libopencv-viz-dev
 
 RUN set -ex; \
     # cd /tmp/scan3dlive_install_files/source/zed-open-capture/udev; \
@@ -94,11 +104,7 @@ RUN set -ex; \
 # RUN sudo apt-get install -y ros-humble-pcl-ros
 # RUN sudo apt-get install -y libpcap-dev
 
-RUN sudo apt-get install -y ros-$ROS_DISTRO-cv-bridge
-RUN sudo apt-get install -y ros-$ROS_DISTRO-image-transport
-RUN sudo apt-get install -y ros-$ROS_DISTRO-pcl-ros
 
-RUN sudo apt-get install -y ros-$ROS_DISTRO-sophus
 
 # Install Sophus
 # RUN set -ex; \

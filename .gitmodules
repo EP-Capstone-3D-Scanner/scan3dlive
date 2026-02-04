@@ -19,3 +19,9 @@
 	path = fast-livo2_ws/src/FAST-LIVO2
 	url = https://github.com/Robotic-Developer-Road/FAST-LIVO2.git
 	branch = humble
+[submodule ".devcontainer/installation_files/Livox-SDK2"]
+	path = .devcontainer/installation_files/Livox-SDK2
+	url = https://github.com/Livox-SDK/Livox-SDK2.git
+[submodule "livox_ros_driver2/src/livox_ros_driver2"]
+	path = livox_ros_driver2/src/livox_ros_driver2
+	url = https://github.com/Livox-SDK/livox_ros_driver2.git

@@ -54,6 +54,15 @@ RUN set -ex; \
     make -j$(nproc); \
     sudo make install
 
+# Install Livox-SDK2
+RUN set -ex; \
+    cd /tmp/scan3dlive_install_files/build; \
+    mkdir Livox-SDK2; \
+    cd Livox-SDK2; \
+    cmake /tmp/scan3dlive_install_files/source/Livox-SDK2 -DCMAKE_POSITION_INDEPENDENT_CODE=ON; \
+    make -j$(nproc); \
+    sudo make install
+
 # Install zed-open-capture
 
 # RUN sudo mkdir -p /etc/udev/rules.d
@@ -81,16 +90,21 @@ RUN set -ex; \
 # RUN sudo apt-get install -y pcl-tools
 # RUN sudo apt-get install -y libcgal-dev
 # RUN sudo apt-get install -y ros-humble-cv-bridge
+# RUN sudo apt-get install -y ros-humble-image-transport
 # RUN sudo apt-get install -y ros-humble-pcl-ros
 # RUN sudo apt-get install -y libpcap-dev
 
+RUN sudo apt-get install -y ros-$ROS_DISTRO-cv-bridge
+RUN sudo apt-get install -y ros-$ROS_DISTRO-image-transport
 RUN sudo apt-get install -y ros-$ROS_DISTRO-pcl-ros
 
+RUN sudo apt-get install -y ros-$ROS_DISTRO-sophus
+
 # Install Sophus
-RUN set -ex; \
-    cd /tmp/scan3dlive_install_files/build; \
-    mkdir Sophus; \
-    cd Sophus; \
-    cmake /tmp/scan3dlive_install_files/source/Sophus -DCMAKE_POSITION_INDEPENDENT_CODE=ON; \
-    make -j$(nproc); \
-    sudo make install
+# RUN set -ex; \
+#     cd /tmp/scan3dlive_install_files/build; \
+#     mkdir Sophus; \
+#     cd Sophus; \
+#     cmake /tmp/scan3dlive_install_files/source/Sophus -DCMAKE_POSITION_INDEPENDENT_CODE=ON; \
+#     make -j$(nproc); \
+#     sudo make install

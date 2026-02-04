@@ -25,6 +25,6 @@
 [submodule "usb_cam"]
 	path = usb_cam_ws/src/usb_cam
 	url = https://github.com/ros-drivers/usb_cam.git
-[submodule "livox_ros_driver2_ws/src/livox_ros_driver2"]
+[submodule "livox_ros_driver2"]
 	path = livox_ros_driver2_ws/src/livox_ros_driver2
 	url = https://github.com/Livox-SDK/livox_ros_driver2.git

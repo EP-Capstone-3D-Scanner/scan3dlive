@@ -2,9 +2,6 @@
 	path = .devcontainer/installation_files/Livox-SDK
 	url = https://github.com/Livox-SDK/Livox-SDK.git
 	branch = fix_ros2_humble
-[submodule "livox_ros2_driver"]
-	path = livox_ros2_driver_ws/src
-	url = https://github.com/Livox-SDK/livox_ros2_driver.git
 [submodule "zed-open-capture"]
 	path = .devcontainer/installation_files/zed-open-capture
 	url = https://github.com/stereolabs/zed-open-capture.git
@@ -28,3 +25,6 @@
 [submodule "livox_ros_driver2"]
 	path = livox_ros_driver2_ws/src/livox_ros_driver2
 	url = https://github.com/Livox-SDK/livox_ros_driver2.git
+[submodule "livox_ros2_driver"]
+	path = livox_ros2_driver_ws/src/livox_ros2_driver
+	url = https://github.com/Livox-SDK/livox_ros2_driver.git

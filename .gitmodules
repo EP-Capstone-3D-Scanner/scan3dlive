@@ -18,13 +18,13 @@
 [submodule "Livox-SDK2"]
 	path = .devcontainer/installation_files/Livox-SDK2
 	url = https://github.com/Livox-SDK/Livox-SDK2.git
-[submodule "livox_ros_driver2"]
-	path = livox_ros_driver2/src/livox_ros_driver2
-	url = https://github.com/Livox-SDK/livox_ros_driver2.git
 [submodule "FAST-LIVO2"]
 	path = fast-livo2_ws/src/FAST-LIVO2
 	url = https://github.com/integralrobotics/FAST-LIVO2.git
 	branch = ros2
-[submodule "usb_cam_ws/src/usb_cam"]
+[submodule "usb_cam"]
 	path = usb_cam_ws/src/usb_cam
 	url = https://github.com/ros-drivers/usb_cam.git
+[submodule "livox_ros_driver2_ws/src/livox_ros_driver2"]
+	path = livox_ros_driver2_ws/src/livox_ros_driver2
+	url = https://github.com/Livox-SDK/livox_ros_driver2.git

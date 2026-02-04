@@ -1,13 +1,19 @@
 from std_msgs.msg import String
-import concurrent.futures
+from geometry_msgs.msg import PointXYZ
 import rclpy
 import rclpy.executors
-import rclpy.logging
+import rclpy.serialization
 import asyncio
+import queue
+import concurrent.futures
 
-rclpy.init()
+ws_msg_queue = queue.Queue()
+
+async handle_ws_msg():
+    pass
 
 def handle_ros_thread():
+    rclpy.init()
     node = rclpy.create_node('ws_server')
     pub = node.create_publisher(String, 'ws_scan3dlive', 10)
     executor = rclpy.executors.SingleThreadedExecutor()

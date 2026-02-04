@@ -25,3 +25,6 @@
 	path = fast-livo2_ws/src/FAST-LIVO2
 	url = https://github.com/integralrobotics/FAST-LIVO2.git
 	branch = ros2
+[submodule "usb_cam_ws/src/usb_cam"]
+	path = usb_cam_ws/src/usb_cam
+	url = https://github.com/ros-drivers/usb_cam.git

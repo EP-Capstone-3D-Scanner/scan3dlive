@@ -104,7 +104,13 @@ RUN set -ex; \
 # RUN sudo apt-get install -y ros-humble-pcl-ros
 # RUN sudo apt-get install -y libpcap-dev
 
+# Cloning rodep keys
+RUN mkdir -p /tmp/scan3dlive_rosdep_keys
+COPY ./rosdep_keys /tmp/scan3dlive_rosdep_keys
 
+# Run rosdep installs
+RUN set -ex; \
+    rosdep install --from-paths /tmp/scan3dlive_rosdep_keys -y --ignore-src
 
 # Install Sophus
 # RUN set -ex; \

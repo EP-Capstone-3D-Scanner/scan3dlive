@@ -84,6 +84,10 @@ RUN set -ex; \
 # RUN sudo mkdir -p /etc/udev/rules.d
 # RUN sudo touch /etc/udev/rules.d/99-slabs.rules
 
+# Install Python3 pip
+RUN sudo apt-get install -y python3-pip
+RUN pip3 install --user websockets
+
 RUN set -ex; \
     # cd /tmp/scan3dlive_install_files/source/zed-open-capture/udev; \
     # bash install_udev_rule.sh; \

@@ -38,6 +38,7 @@ import sys
 # Hack to get relative import of .camera_config file working
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(dir_path)
+config_path = dir_path + '/../config'
 
 from camera_config import CameraConfig, USB_CAM_DIR  # noqa: E402
 
@@ -50,7 +51,7 @@ CAMERAS = []
 CAMERAS.append(
     CameraConfig(
         name='camera1',
-        param_path=Path(USB_CAM_DIR, 'config', 'params_1.yaml')
+        param_path=Path(config_path, 'params_1.yaml')
     )
     # Add more Camera's here and they will automatically be launched below
 )

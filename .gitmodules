@@ -31,3 +31,6 @@
 [submodule "livox_ros2_driver_ext"]
 	path = livox_ros2_driver_ext_ws/src/livox_ros2_driver_ext
 	url = https://github.com/EP-Capstone-3D-Scanner/livox_ros2_driver_ext.git
+[submodule "FAST-Calib-ROS2"]
+	path = fast-calib_ws/src/FAST-Calib-ROS2
+	url = https://github.com/ichangjian/FAST-Calib-ROS2.git

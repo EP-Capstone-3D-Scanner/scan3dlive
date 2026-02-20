@@ -28,3 +28,6 @@
 [submodule "livox_ros2_driver"]
 	path = livox_ros2_driver_ws/src/livox_ros2_driver
 	url = https://github.com/Livox-SDK/livox_ros2_driver.git
+[submodule "FAST-Calib-ROS2"]
+	path = fast-calib_ws/src/FAST-Calib-ROS2
+	url = https://github.com/ichangjian/FAST-Calib-ROS2.git

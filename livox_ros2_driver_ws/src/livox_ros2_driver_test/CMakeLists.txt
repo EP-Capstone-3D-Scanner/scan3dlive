@@ -14,6 +14,10 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
+find_package(livox_interfaces REQUIRED)
+find_package(livox_ros_driver2 REQUIRED)
+
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -32,7 +36,13 @@ install(DIRECTORY
 )
 
 add_executable(lidar_formatter src/lidar_formatter.cpp)
-ament_target_dependencies(lidar_formatter rclcpp std_msgs sensor_msgs)
+ament_target_dependencies(lidar_formatter
+rclcpp
+std_msgs
+sensor_msgs
+livox_interfaces
+livox_ros_driver2
+)
 
 add_executable(test_publisher src/test_publisher.cpp)
 ament_target_dependencies(test_publisher rclcpp std_msgs sensor_msgs)

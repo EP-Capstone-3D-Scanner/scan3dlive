@@ -2,7 +2,7 @@
   ros__parameters:
     common:
       img_topic: "/camera1/image_cropped"
-      lid_topic: "/livox/lidar"
+      lid_topic: "/livox/lidar_formatted"
       imu_topic: "/livox/imu"
       img_en: 1
       lidar_en: 1
@@ -13,14 +13,14 @@
       extrinsic_R: [1.0, 0.0, 0.0,
                     0.0, 1.0, 0.0,
                     0.0, 0.0, 1.0]
-      Rcl: [0.00610193,-0.999863,-0.0154172,
-            -0.00615449,0.0153796,-0.999863,
-            0.999962,0.00619598,-0.0060598] 
-      Pcl: [0.0194384, 0.104689,-0.0251952]
+      Rcl: [0.0, 1.0, 0.0,
+            0.0, 0.0, 1.0,
+            1.0, 0.0, 0.0]
+      Pcl: [-0.27, -0.05248,-0.06202]
 
     time_offset: 
-      imu_time_offset: 0.0
-      img_time_offset: 0.1
+      imu_time_offset: -0.041
+      img_time_offset: -1771020677.48
       exposure_time_init: 0.0
 
     preprocess:

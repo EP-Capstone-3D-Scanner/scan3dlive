@@ -20,7 +20,7 @@
 
     time_offset: 
       imu_time_offset: -0.041
-      img_time_offset: -1771020677.48
+      img_time_offset: 0.0
       exposure_time_init: 0.0
 
     preprocess:

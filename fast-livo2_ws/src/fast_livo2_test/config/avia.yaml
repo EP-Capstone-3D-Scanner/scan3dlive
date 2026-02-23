@@ -3,7 +3,7 @@
     common:
       img_topic: "/camera1/image_cropped"
       lid_topic: "/livox/lidar_formatted"
-      imu_topic: "/livox/imu"
+      imu_topic: "/livox/imu_formatted"
       img_en: 1
       lidar_en: 1
       ros_driver_bug_fix: false

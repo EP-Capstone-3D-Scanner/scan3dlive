@@ -29,9 +29,12 @@ class LidarFormatter : public rclcpp::Node
     {
       auto msg_out = livox_ros_driver2::msg::CustomMsg();
 
+      auto current_time = this->now();
+
       // 1. Copy Metadata
       msg_out.header = msg_in.header;
-      msg_out.timebase = msg_in.timebase;
+      msg_out.header.stamp = current_time;
+      msg_out.timebase = current_time.nanoseconds(); //msg_in.timebase;
       msg_out.point_num = msg_in.point_num;
       msg_out.lidar_id = msg_in.lidar_id;
       msg_out.rsvd = msg_in.rsvd;

@@ -44,11 +44,21 @@ livox_interfaces
 livox_ros_driver2
 )
 
+add_executable(lidar_formatter_bag src/lidar_formatter_bag.cpp)
+ament_target_dependencies(lidar_formatter_bag
+rclcpp
+std_msgs
+sensor_msgs
+livox_interfaces
+livox_ros_driver2
+)
+
 add_executable(test_publisher src/test_publisher.cpp)
 ament_target_dependencies(test_publisher rclcpp std_msgs sensor_msgs)
 
 install(TARGETS
   lidar_formatter
+  lidar_formatter_bag
   test_publisher
   DESTINATION lib/${PROJECT_NAME})
 

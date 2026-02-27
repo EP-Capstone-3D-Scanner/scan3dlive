@@ -28,3 +28,6 @@
 [submodule "livox_ros2_driver"]
 	path = livox_ros2_driver_ws/src/livox_ros2_driver
 	url = https://github.com/Livox-SDK/livox_ros2_driver.git
+[submodule "livox_ros2_driver_ext"]
+	path = livox_ros2_driver_ext_ws/src/livox_ros2_driver_ext
+	url = https://github.com/EP-Capstone-3D-Scanner/livox_ros2_driver_ext.git

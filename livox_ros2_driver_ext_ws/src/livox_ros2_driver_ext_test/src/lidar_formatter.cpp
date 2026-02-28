@@ -39,8 +39,8 @@ class LidarFormatter : public rclcpp::Node
       auto current_time = this->now();
 
       msg_out.header = msg_in.header;
-      msg_out.header.stamp = current_time;
-      msg_out.timebase = current_time.nanoseconds(); //msg_in.timebase;
+      // msg_out.header.stamp = current_time;
+      msg_out.timebase = msg_in.timebase; //current_time.nanoseconds();
       msg_out.point_num = msg_in.point_num;
       msg_out.lidar_id = msg_in.lidar_id;
       msg_out.rsvd = msg_in.rsvd;
@@ -66,8 +66,8 @@ class LidarFormatter : public rclcpp::Node
     {
       auto msg_out = msg_in;
 
-      auto current_time = this->now();
-      msg_out.header.stamp = current_time;
+      // auto current_time = this->now();
+      // msg_out.header.stamp = current_time;
       
       publisher_imu_->publish(msg_out);
       // RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg.data.c_str());

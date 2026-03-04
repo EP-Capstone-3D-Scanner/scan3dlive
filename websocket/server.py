@@ -2,6 +2,8 @@ import rclpy
 from rclpy.node import Node 
 from rclpy.qos import qos_profile_sensor_data 
 from livox_interfaces.msg import CustomMsg
+from sensor_msgs.msg import PointCloud2
+import sensor_msgs_py.point_cloud2 as pc2
 import asyncio 
 import queue 
 import concurrent.futures 
@@ -21,13 +23,20 @@ class Scan3DLiveNode(Node):
     def __init__(self): 
         super().__init__('scan3dliveui') 
         print("Scan3DLiveNode initialized, subscribing to /livox/lidar") 
-        self.sub = self.create_subscription(CustomMsg, '/livox/lidar', self.callback, qos_profile_sensor_data) 
+        self.sub = self.create_subscription(PointCloud2, '/cloud_registered', self.callback, qos_profile_sensor_data) 
     
     def callback(self, msg):
-        b = bytearray()
-        for point in msg._points:
-            b.extend(struct.pack('<fffBBBB', -point.y, point.z+0.5, point.x, 0, 0, 0, 255))
-        ws_msg_queue.put_nowait(b) 
+        ba = bytearray()
+        points = pc2.read_points(msg, field_names=("x", "y", "z", "rgb"), skip_nans=True)
+        print(points)
+        for point in points:
+            s = struct.pack('>f', point[3])
+            i = struct.unpack('>l', s)[0]
+            r = (i & 0x00FF0000) >> 16
+            g = (i & 0x0000FF00) >> 8
+            b = (i & 0x000000FF) >> 0
+            ba.extend(struct.pack('<fffBBBB', -point[1], point[2]+0.5, -point[0], r, g, b, 255))
+        ws_msg_queue.put_nowait(ba) 
 
 # WebSocket server to send messages from ROS to clients 
 async def handler(websocket): 

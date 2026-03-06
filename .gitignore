@@ -8,3 +8,6 @@ build/
 
 # large Dataset Files
 datasets/
+
+# large segmentation files
+segmentation files/

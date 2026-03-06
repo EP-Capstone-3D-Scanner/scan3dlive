@@ -1,12 +1,21 @@
 {
-  "name": "humble desktop-full",
-  "dockerFile": "Dockerfile",
+  "name": "humble jetson",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
   "runArgs": [
     "--privileged",
     "--network=host",
+    "--runtime=nvidia",
+    "--shm-size=8g",
     "--device=/dev/video0:/dev/video0",
     "--device=/dev/video1:/dev/video1"
   ],
+  "containerEnv": {
+    "NVIDIA_VISIBLE_DEVICES": "all",
+    "NVIDIA_DRIVER_CAPABILITIES": "all"
+  },
   "workspaceMount": "source=${localWorkspaceFolder},target=/${localWorkspaceFolderBasename},type=bind",
   "workspaceFolder": "/${localWorkspaceFolderBasename}",
   "mounts": [

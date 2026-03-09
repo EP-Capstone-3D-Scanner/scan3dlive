@@ -38,4 +38,8 @@ install(DIRECTORY ./rviz_cfg/
   DESTINATION share/${PROJECT_NAME}/rviz_cfg
 )
 
+install(DIRECTORY ./calib_data/
+  DESTINATION share/${PROJECT_NAME}/calib_data
+)
+
 ament_package()

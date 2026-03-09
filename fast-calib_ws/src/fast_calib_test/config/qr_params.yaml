@@ -2,14 +2,14 @@ fast_calib:
   ros__parameters:
     # Camera intrinsics  
     # mid360
-    fx: 522.123514287681
-    fy: 522.275153384482
-    cx: 773.466430504725
-    cy: 534.053165700174
-    k1: 0.00324949759262203
-    k2: -0.0171040538369167
-    p1: 0.000669657443377146
-    p2: -0.000350205468789575
+    # fx: 522.123514287681
+    # fy: 522.275153384482
+    # cx: 773.466430504725
+    # cy: 534.053165700174
+    # k1: 0.00324949759262203
+    # k2: -0.0171040538369167
+    # p1: 0.000669657443377146
+    # p2: -0.000350205468789575
 
     # avia
     # fx: 1215.31801774424
@@ -31,13 +31,23 @@ fast_calib:
     # p1: -0.000731746350601389
     # p2: -0.000201478932371979
 
+    # Zed 2i
+    fx: 1063.32
+    fy: 1063.34
+    cx: 1124.66
+    cy: 661.628
+    k1: -0.0712496
+    k2: 0.0551279
+    p1: -0.0227127
+    p2: 0.0
+
     # Calibration target parameters
-    marker_size: 0.20 # ArUco marker size (our test data uses 0.16m; adjust to match your marker size)
+    marker_size: 0.16 # ArUco marker size (our test data uses 0.16m; adjust to match your marker size)
     delta_width_qr_center: 0.55 # Half the distance between the centers of two markers in the horizontal direction 
     delta_height_qr_center: 0.35 # Half the distance between the centers of two markers in the vertical direction
     delta_width_circles: 0.5 # Distance between the centers of two circles in the horizontal direction
     delta_height_circles: 0.4 # Distance between the centers of two circles in the vertical direction
-    circle_radius: 0.12 # Radius of the circle 
+    circle_radius: 0.08 # Radius of the circle 
 
     # Distance filter
     x_min: 1.5
@@ -49,8 +59,9 @@ fast_calib:
 
     # Input
     lidar_topic: "/livox/lidar" # /ouster/points /livox/lidar
-    bag_path: "/modify/path/FAST-Calib-ROS2/calib_data/mid360_11"
-    image_path: "/modify/path/FAST-Calib-ROS2/calib_data/mid360_11/11.png"
+    # bag and image paths relative to calib_data folder
+    bag_path: "2026-02-06_first_data" # use folder name instead of path
+    image_path: "cluster copy.png" # use file name instead of path
 
     # Output
-    output_path: "/modify/path/FAST-Calib-ROS2/output"
+    output_path: "output" # folder path relative to package

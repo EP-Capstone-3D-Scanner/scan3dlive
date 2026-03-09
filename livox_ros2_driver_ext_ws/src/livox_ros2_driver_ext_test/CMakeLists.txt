@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(livox_ros2_driver_test)
+project(livox_ros2_driver_ext_test)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -14,7 +14,7 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
-find_package(livox_interfaces REQUIRED)
+find_package(livox_interfaces_ext REQUIRED)
 find_package(livox_ros_driver2 REQUIRED)
 
 
@@ -40,7 +40,7 @@ ament_target_dependencies(lidar_formatter
 rclcpp
 std_msgs
 sensor_msgs
-livox_interfaces
+livox_interfaces_ext
 livox_ros_driver2
 )
 
@@ -49,7 +49,7 @@ ament_target_dependencies(lidar_formatter_bag
 rclcpp
 std_msgs
 sensor_msgs
-livox_interfaces
+livox_interfaces_ext
 livox_ros_driver2
 )
 

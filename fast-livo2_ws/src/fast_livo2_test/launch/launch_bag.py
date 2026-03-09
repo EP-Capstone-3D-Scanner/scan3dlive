@@ -16,7 +16,7 @@ def generate_launch_description():
     rviz_config_file = os.path.join(get_package_share_directory("fast_livo2_test"), "rviz_cfg", "fast_livo2.rviz")
 
     #Load parameters
-    avia_config_cmd = os.path.join(config_file_dir, "avia.yaml")
+    avia_config_cmd = os.path.join(config_file_dir, "avia_bag.yaml")
     camera_config_cmd = os.path.join(config_file_dir, "camera_pinhole.yaml")
 
     # Param use_rviz

@@ -21,15 +21,14 @@ public:
 private:
   void image_callback(const sensor_msgs::msg::Image::SharedPtr msg) const {
     try {
-      // 1. Convert ROS Image to OpenCV Mat
+      
       cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg, msg->encoding);
 
-      // 2. Define the Region of Interest (ROI)
-      // Rect(x, y, width, height)
+      
       int half_width = cv_ptr->image.cols / 2;
       cv::Rect roi(half_width, 0, half_width, cv_ptr->image.rows);
 
-      // 3. Crop and Publish
+      
       cv::Mat cropped_img = cv_ptr->image(roi);
       
       auto out_msg = cv_bridge::CvImage(msg->header, msg->encoding, cropped_img).toImageMsg();

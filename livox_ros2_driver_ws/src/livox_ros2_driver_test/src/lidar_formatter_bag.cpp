@@ -21,12 +21,12 @@ class LidarFormatter : public rclcpp::Node
     : Node("lidar_formatter")
     {
       subscription_lidar_ = this->create_subscription<livox_interfaces::msg::CustomMsg>(
-      "livox/lidar", 10, std::bind(&LidarFormatter::topic_callback_lidar, this, _1));
+      "livox/lidar", 20, std::bind(&LidarFormatter::topic_callback_lidar, this, _1));
 
       publisher_lidar_ = this->create_publisher<livox_ros_driver2::msg::CustomMsg>("livox/lidar_formatted", 10);
       
       subscription_imu_ = this->create_subscription<sensor_msgs::msg::Imu>(
-      "livox/imu", 10, std::bind(&LidarFormatter::topic_callback_imu, this, _1));
+      "livox/imu", 150, std::bind(&LidarFormatter::topic_callback_imu, this, _1));
 
       publisher_imu_ = this->create_publisher<sensor_msgs::msg::Imu>("livox/imu_formatted", 10);
     }
@@ -39,8 +39,8 @@ class LidarFormatter : public rclcpp::Node
       auto current_time = this->now();
 
       msg_out.header = msg_in.header;
-      msg_out.header.stamp = current_time;
-      msg_out.timebase = current_time.nanoseconds(); //msg_in.timebase;
+      // msg_out.header.stamp = current_time;
+      msg_out.timebase = msg_in.timebase;
       msg_out.point_num = msg_in.point_num;
       msg_out.lidar_id = msg_in.lidar_id;
       msg_out.rsvd = msg_in.rsvd;
@@ -67,7 +67,7 @@ class LidarFormatter : public rclcpp::Node
       auto msg_out = msg_in;
 
       auto current_time = this->now();
-      msg_out.header.stamp = current_time;
+      // msg_out.header.stamp = current_time;
       
       publisher_imu_->publish(msg_out);
       // RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg.data.c_str());

@@ -5,8 +5,8 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
-#include "livox_interfaces/msg/custom_point.hpp"
-#include "livox_interfaces/msg/custom_msg.hpp"
+#include "livox_interfaces_ext/msg/custom_point.hpp"
+#include "livox_interfaces_ext/msg/custom_msg.hpp"
 
 #include "livox_ros_driver2/msg/custom_msg.hpp"
 
@@ -20,7 +20,7 @@ class LidarFormatter : public rclcpp::Node
     LidarFormatter()
     : Node("lidar_formatter")
     {
-      subscription_lidar_ = this->create_subscription<livox_interfaces::msg::CustomMsg>(
+      subscription_lidar_ = this->create_subscription<livox_interfaces_ext::msg::CustomMsg>(
       "livox/lidar", 10, std::bind(&LidarFormatter::topic_callback_lidar, this, _1));
 
       publisher_lidar_ = this->create_publisher<livox_ros_driver2::msg::CustomMsg>("livox/lidar_formatted", 10);
@@ -32,15 +32,15 @@ class LidarFormatter : public rclcpp::Node
     }
 
   private:
-    void topic_callback_lidar(const livox_interfaces::msg::CustomMsg & msg_in) const
+    void topic_callback_lidar(const livox_interfaces_ext::msg::CustomMsg & msg_in) const
     {
       auto msg_out = livox_ros_driver2::msg::CustomMsg();
 
       auto current_time = this->now();
 
       msg_out.header = msg_in.header;
-      msg_out.header.stamp = current_time;
-      msg_out.timebase = current_time.nanoseconds(); //msg_in.timebase;
+      // msg_out.header.stamp = current_time;
+      msg_out.timebase = msg_in.timebase; //current_time.nanoseconds();
       msg_out.point_num = msg_in.point_num;
       msg_out.lidar_id = msg_in.lidar_id;
       msg_out.rsvd = msg_in.rsvd;
@@ -66,14 +66,14 @@ class LidarFormatter : public rclcpp::Node
     {
       auto msg_out = msg_in;
 
-      auto current_time = this->now();
-      msg_out.header.stamp = current_time;
+      // auto current_time = this->now();
+      // msg_out.header.stamp = current_time;
       
       publisher_imu_->publish(msg_out);
       // RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg.data.c_str());
     }
 
-    rclcpp::Subscription<livox_interfaces::msg::CustomMsg>::SharedPtr subscription_lidar_;
+    rclcpp::Subscription<livox_interfaces_ext::msg::CustomMsg>::SharedPtr subscription_lidar_;
     rclcpp::Publisher<livox_ros_driver2::msg::CustomMsg>::SharedPtr publisher_lidar_;
     
     rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr subscription_imu_;

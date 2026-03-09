@@ -11,6 +11,8 @@ find_package(ament_cmake REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
+find_package(fast_calib REQUIRED)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -22,5 +24,18 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
+)
+
+install(DIRECTORY ./config/
+  DESTINATION share/${PROJECT_NAME}/config
+)
+
+install(DIRECTORY ./rviz_cfg/
+  DESTINATION share/${PROJECT_NAME}/rviz_cfg
+)
 
 ament_package()

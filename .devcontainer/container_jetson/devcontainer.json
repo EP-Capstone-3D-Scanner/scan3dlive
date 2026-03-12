@@ -21,6 +21,7 @@
   "mounts": [
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/vscode/.bash_history,type=bind"
   ],
+  "forwardPorts": ["8001:8001"],
   "customizations": {
     "vscode": {
       "extensions": [

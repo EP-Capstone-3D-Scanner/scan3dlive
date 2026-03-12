@@ -116,6 +116,9 @@ COPY ./rosdep_keys /tmp/scan3dlive_rosdep_keys
 RUN set -ex; \
     rosdep install --from-paths /tmp/scan3dlive_rosdep_keys -y --ignore-src
 
+# Expose port 8001 
+EXPOSE 8001
+
 # Install Sophus
 # RUN set -ex; \
 #     cd /tmp/scan3dlive_install_files/build; \

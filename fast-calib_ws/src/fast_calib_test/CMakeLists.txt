@@ -42,4 +42,8 @@ install(DIRECTORY ./calib_data/
   DESTINATION share/${PROJECT_NAME}/calib_data
 )
 
+install(DIRECTORY ./output/
+  DESTINATION share/${PROJECT_NAME}/output
+)
+
 ament_package()

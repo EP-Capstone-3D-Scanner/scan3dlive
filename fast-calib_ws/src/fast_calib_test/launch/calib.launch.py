@@ -37,8 +37,7 @@ def generate_launch_description():
         node_params.get('bag_path')])
     image_path = PathJoinSubstitution([pkg_share, 'calib_data', 
         node_params.get('image_path')])
-    output_path = PathJoinSubstitution([pkg_share, 
-        node_params.get('output_path')])
+    output_path = node_params.get('output_path')
 
     # Fast calibration node
     fast_calib_node = Node(
@@ -51,7 +50,7 @@ def generate_launch_description():
             {
                 'bag_path': bag_path,
                 'image_path': image_path,
-                'output': output_path
+                'output_path': output_path
             }
         ]
     )

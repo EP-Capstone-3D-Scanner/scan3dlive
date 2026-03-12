@@ -42,26 +42,26 @@ fast_calib:
     p2: 0.0
 
     # Calibration target parameters
-    marker_size: 0.16 # ArUco marker size (our test data uses 0.16m; adjust to match your marker size)
-    delta_width_qr_center: 0.55 # Half the distance between the centers of two markers in the horizontal direction 
-    delta_height_qr_center: 0.35 # Half the distance between the centers of two markers in the vertical direction
-    delta_width_circles: 0.5 # Distance between the centers of two circles in the horizontal direction
-    delta_height_circles: 0.4 # Distance between the centers of two circles in the vertical direction
-    circle_radius: 0.08 # Radius of the circle 
+    marker_size: 0.160 # ArUco marker size (our test data uses 0.16m; adjust to match your marker size)
+    delta_width_qr_center: 0.350 # Half the distance between the centers of two markers in the horizontal direction 
+    delta_height_qr_center: 0.190 # Half the distance between the centers of two markers in the vertical direction
+    delta_width_circles: 0.360 # Distance between the centers of two circles in the horizontal direction
+    delta_height_circles: 0.380 # Distance between the centers of two circles in the vertical direction
+    circle_radius: 0.080 # Radius of the circle 
 
     # Distance filter
-    x_min: 1.5
+    x_min: 1.0
     x_max: 3.0
-    y_min: -1.5
-    y_max: 2.0
+    y_min: -0.5
+    y_max: 0.6
     z_min: -0.5 # avia and mid360: -0.5 ouster: -0.8
     z_max: 2.0
 
     # Input
     lidar_topic: "/livox/lidar" # /ouster/points /livox/lidar
     # bag and image paths relative to calib_data folder
-    bag_path: "2026-02-06_first_data" # use folder name instead of path
-    image_path: "cluster copy.png" # use file name instead of path
+    bag_path: "rosbag2_2026_03_11-23_41_21" # use folder name instead of path
+    image_path: "snapshot_20260311_234037.png" # use file name instead of path
 
     # Output
-    output_path: "output" # folder path relative to package
+    output_path: "/scan3dlive/fast-calib_ws/src/fast_calib_test/output/" # folder path relative to package

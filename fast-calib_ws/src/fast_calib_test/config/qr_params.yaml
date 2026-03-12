@@ -43,8 +43,8 @@ fast_calib:
 
     # Calibration target parameters
     marker_size: 0.160 # ArUco marker size (our test data uses 0.16m; adjust to match your marker size)
-    delta_width_qr_center: 0.700 # Half the distance between the centers of two markers in the horizontal direction 
-    delta_height_qr_center: 0.380 # Half the distance between the centers of two markers in the vertical direction
+    delta_width_qr_center: 0.350 # Half the distance between the centers of two markers in the horizontal direction 
+    delta_height_qr_center: 0.190 # Half the distance between the centers of two markers in the vertical direction
     delta_width_circles: 0.360 # Distance between the centers of two circles in the horizontal direction
     delta_height_circles: 0.380 # Distance between the centers of two circles in the vertical direction
     circle_radius: 0.080 # Radius of the circle 
@@ -60,8 +60,8 @@ fast_calib:
     # Input
     lidar_topic: "/livox/lidar" # /ouster/points /livox/lidar
     # bag and image paths relative to calib_data folder
-    bag_path: "rosbag2_2026_03_11-23_15_18" # use folder name instead of path
-    image_path: "snapshot_20260311_231509.png" # use file name instead of path
+    bag_path: "rosbag2_2026_03_11-23_41_21" # use folder name instead of path
+    image_path: "snapshot_20260311_234037.png" # use file name instead of path
 
     # Output
     output_path: "/scan3dlive/fast-calib_ws/src/fast_calib_test/output/" # folder path relative to package

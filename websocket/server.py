@@ -20,25 +20,67 @@ ros2 topic pub /livox/lidar livox_interfaces/msg/CustomMsg "{ header: {stamp: {s
 
 ws_msg_queue = queue.Queue()
 BYTES_PER_POINT = 16
+import time
+import numpy as np
 
 class Scan3DLiveNode(Node): 
     def __init__(self): 
         super().__init__('scan3dliveui') 
         print("Scan3DLiveNode initialized, subscribing to /livox/lidar") 
-        self.sub = self.create_subscription(PointCloud2, '/cloud_registered', self.callback, qos_profile_sensor_data) 
+        self.sub = self.create_subscription(
+            PointCloud2, 
+            '/cloud_registered', 
+            self.callback, 
+            qos_profile_sensor_data
+        ) 
     
     def callback(self, msg):
-        ba = bytearray()
-        points = pc2.read_points(msg, field_names=("x", "y", "z", "rgb"), skip_nans=True)
-        #print(points)
-        for point in points:
-            s = struct.pack('>f', point[3])
-            i = struct.unpack('>l', s)[0]
-            r = (i & 0x00FF0000) >> 16
-            g = (i & 0x0000FF00) >> 8
-            b = (i & 0x000000FF) >> 0
-            ba.extend(struct.pack('<fffBBBB', -point[1], point[2]+0.5, -point[0], r, g, b, 255))
-        ws_msg_queue.put_nowait(ba) 
+        start_time = time.perf_counter()
+        
+        try:
+            points = pc2.read_points(msg, field_names=("x", "y", "z", "rgb"), skip_nans=True)
+            
+            if len(points) > 0:
+                
+                x = points['x']
+                y = points['y']
+                z = points['z']
+                rgb_float = points['rgb']
+                rgb_int = rgb_float.view(np.uint32)
+                
+                r = (rgb_int & 0x00FF0000) >> 16
+                g = (rgb_int & 0x0000FF00) >> 8
+                b = (rgb_int & 0x000000FF)
+                
+                dt = np.dtype([
+                    ('x', '<f4'),
+                    ('y', '<f4'),
+                    ('z', '<f4'),
+                    ('r', 'u1'),
+                    ('g', 'u1'),
+                    ('b', 'u1'),
+                    ('a', 'u1')
+                ])
+                
+                out_arr = np.empty(len(points), dtype=dt)
+                out_arr['x'] = -y
+                out_arr['y'] = z + 0.5
+                out_arr['z'] = -x
+                out_arr['r'] = r
+                out_arr['g'] = g
+                out_arr['b'] = b
+                out_arr['a'] = 255
+                
+                ba = bytearray(out_arr.tobytes())
+                ws_msg_queue.put_nowait(ba) 
+                
+        except Exception as e:
+            print(f"CRITICAL ERROR in callback: {e}")
+            return
+            
+        end_time = time.perf_counter()
+        elapsed_time = end_time - start_time
+        print(f"Execution time: {elapsed_time:.4f} seconds")
 
 
 async def handler(websocket): 
@@ -81,12 +123,10 @@ async def handler(websocket):
                                     print("Starting scanner script...")
                                     #command = "source /opt/ros/humble/setup.bash && ros2 bag play ../datasets/rosbag2_2026_03_12-00_08_30"
                                     #command = "source /opt/ros/humble/setup.bash && ros2 bag play ../../rosbag2_2026_03_12-00_08_30_0.db3"
-                                    #command = "source /opt/ros/humble/setup.bash && ros2 bag play ../../rosbag2_2026_03_06-22_57_43_0.db3"
-                                    #command = "source /opt/ros/humble/setup.bash && ros2 bag play ../../rosbag2_2026_02_27-23_41_08_0.db3"
-                                    #command = "source /opt/ros/humble/setup.bash && ros2 bag play ../../rosbag2_2026_03_04-21_39_51_0.db3"
-                                    #scanner_process = subprocess.Popen(command, shell=True, executable='/bin/bash',stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
-                                    scanner_process = subprocess.Popen(["bash", "-c", "touch hi.txt"])
-                                    scanner_process = subprocess.Popen("./start_scanner.sh > hi.txt", shell=True)
+                                    command = "source /opt/ros/humble/setup.bash && ros2 bag play ../../rosbag2_2026_03_06-22_57_43_0.db3"
+                                    scanner_process = subprocess.Popen(command, shell=True, executable='/bin/bash',stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
+                                    #scanner_process = subprocess.Popen(["bash", "-c", "touch hi.txt"])
+                                    #scanner_process = subprocess.Popen("./start_scanner.sh > hi.txt", shell=True)
                             elif action == "stop_scanner":
                                 if scanner_process is not None and scanner_process.poll() is None:
                                     print("Stopping scanner script...")

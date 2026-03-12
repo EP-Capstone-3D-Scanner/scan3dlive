@@ -21,17 +21,22 @@ public:
 private:
   void image_callback(const sensor_msgs::msg::Image::SharedPtr msg) const {
     try {
-      
+      // Convert ROS Image message to OpenCV image
       cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg, msg->encoding);
 
-      
+      // Define Region of Interest (ROI) for cropping the right half
       int half_width = cv_ptr->image.cols / 2;
       cv::Rect roi(half_width, 0, half_width, cv_ptr->image.rows);
 
-      
+      // Crop the image
       cv::Mat cropped_img = cv_ptr->image(roi);
       
-      auto out_msg = cv_bridge::CvImage(msg->header, msg->encoding, cropped_img).toImageMsg();
+      // --- NEW: Rotate the cropped image 180 degrees ---
+      cv::Mat rotated_img;
+      cv::rotate(cropped_img, rotated_img, cv::ROTATE_180);
+      
+      // Convert back to ROS Image message and publish the rotated image
+      auto out_msg = cv_bridge::CvImage(msg->header, msg->encoding, rotated_img).toImageMsg();
       publisher_->publish(*out_msg);
 
     } catch (cv_bridge::Exception& e) {

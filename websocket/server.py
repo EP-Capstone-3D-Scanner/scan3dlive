@@ -79,13 +79,14 @@ async def handler(websocket):
                             if action == "start_scanner":
                                 if scanner_process is None or scanner_process.poll() is not None:
                                     print("Starting scanner script...")
-                                    command = "source /opt/ros/humble/setup.bash && ros2 bag play ../../rosbag2_2026_03_12-00_08_30_0.db3"
+                                    #command = "source /opt/ros/humble/setup.bash && ros2 bag play ../datasets/rosbag2_2026_03_12-00_08_30"
+                                    #command = "source /opt/ros/humble/setup.bash && ros2 bag play ../../rosbag2_2026_03_12-00_08_30_0.db3"
                                     #command = "source /opt/ros/humble/setup.bash && ros2 bag play ../../rosbag2_2026_03_06-22_57_43_0.db3"
                                     #command = "source /opt/ros/humble/setup.bash && ros2 bag play ../../rosbag2_2026_02_27-23_41_08_0.db3"
                                     #command = "source /opt/ros/humble/setup.bash && ros2 bag play ../../rosbag2_2026_03_04-21_39_51_0.db3"
-                                    scanner_process = subprocess.Popen(command, shell=True, executable='/bin/bash',stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
-                                    #scanner_process = subprocess.Popen(["bash", "-c", "touch hi.txt"])
-                                    #scanner_process = subprocess.Popen("./start_scanner.sh > hi.txt", shell=True)
+                                    #scanner_process = subprocess.Popen(command, shell=True, executable='/bin/bash',stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
+                                    scanner_process = subprocess.Popen(["bash", "-c", "touch hi.txt"])
+                                    scanner_process = subprocess.Popen("./start_scanner.sh > hi.txt", shell=True)
                             elif action == "stop_scanner":
                                 if scanner_process is not None and scanner_process.poll() is None:
                                     print("Stopping scanner script...")

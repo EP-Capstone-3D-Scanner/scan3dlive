@@ -8,11 +8,13 @@ import asyncio
 import queue 
 import concurrent.futures 
 import websockets
-import struct
 import ssl
 import pathlib
 import json
 import subprocess
+import time
+import os
+import signal
 
 """
 ros2 topic pub /livox/lidar livox_interfaces/msg/CustomMsg "{ header: {stamp: {sec: 0, nanosec: 0}, frame_id: 'livox_frame'}, timebase: 1000000000, point_num: 2, lidar_id: 1, rsvd: [0,0,0], points: [{offset_time: 0, x: 1.0, y: 0.0, z: 0.5, reflectivity: 120, tag: 0, line: 1}, {offset_time: 1000, x: 1.2, y: 0.1, z: 0.6, reflectivity: 100, tag: 0, line: 2}] }"
@@ -85,12 +87,19 @@ class Scan3DLiveNode(Node):
 
 async def handler(websocket): 
     print(f"Client connected from {websocket.remote_address}")
-    
-    # Flow control event: True when the client is ready for data
     client_ready = asyncio.Event()
-    client_ready.set() # Assume ready for the very first message
+    client_ready.set()
     
-    scanner_process = None
+    scanner_processes = []
+    scanner_commands = [
+        "cd ../livox_ros2_driver_ext_ws/ && source install/setup.bash && ros2 launch livox_ros2_driver_ext_test lidar_launch.py",
+        "cd ../livox_ros2_driver_ext_ws/ && source install/setup.bash && ros2 run livox_ros2_driver_ext_test lidar_formatter",
+        "cd ../usb_cam_ws/ && source install/setup.bash && ros2 launch usb_cam_test camera.launch.py",
+        "cd ../usb_cam_ws/ && source install/setup.bash && ros2 run usb_cam_formatter formatter",
+        "cd ../fast-livo2_ws && source install/setup.bash && ros2 launch fast_livo2_test launch.py"
+    ]
+
+
 
     async def send_data_loop():
         while True:
@@ -105,7 +114,9 @@ async def handler(websocket):
                 break
 
     async def receive_command_loop():
-        nonlocal scanner_process
+        nonlocal scanner_processes
+        nonlocal scanner_commands
+
         try:
             async for message in websocket:
                 if isinstance(message, str): # Commands and ACKs will be text/JSON
@@ -114,33 +125,83 @@ async def handler(websocket):
                         msg_type = data.get("type")
                         
                         if msg_type == "ACK":
-                            client_ready.set() # Unblock the send_data_loop
-                            
+                            client_ready.set()
+
                         elif msg_type == "COMMAND":
                             action = data.get("action")
+                            
                             if action == "start_scanner":
-                                if scanner_process is None or scanner_process.poll() is not None:
-                                    print("Starting scanner script...")
-                                    #command = "source /opt/ros/humble/setup.bash && ros2 bag play ../datasets/rosbag2_2026_03_12-00_08_30"
-                                    #command = "source /opt/ros/humble/setup.bash && ros2 bag play ../../rosbag2_2026_03_12-00_08_30_0.db3"
-                                    command = "source /opt/ros/humble/setup.bash && ros2 bag play ../../rosbag2_2026_03_06-22_57_43_0.db3"
-                                    scanner_process = subprocess.Popen(command, shell=True, executable='/bin/bash',stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
-                                    #scanner_process = subprocess.Popen(["bash", "-c", "touch hi.txt"])
-                                    #scanner_process = subprocess.Popen("./start_scanner.sh > hi.txt", shell=True)
+                                # Check if processes are already running (list is not empty)
+                                if not scanner_processes:
+                                    print("Starting scanner scripts...")
+                                    
+                                    # Start the first 4 commands
+                                    for i in range(4):
+                                        print(f"Starting process {i+1}/5...")
+                                        proc = subprocess.Popen(
+                                            scanner_commands[i], 
+                                            shell=True, 
+                                            executable='/bin/bash',
+                                            stdout=subprocess.PIPE, 
+                                            stderr=subprocess.PIPE,
+                                            text=True,
+                                            preexec_fn=os.setsid # Groups processes so ROS launches can be killed cleanly
+                                        )
+                                        scanner_processes.append(proc)
+                                    
+                                    # Wait a brief moment to let the first 4 initialize
+                                    print("Waiting for initial ROS nodes to spin up...")
+                                    time.sleep(3)
+                                    
+                                    # Start the 5th command (fast_livo2)
+                                    print("Starting process 5/5 (fast_livo2)...")
+                                    proc = subprocess.Popen(
+                                        scanner_commands[4], 
+                                        shell=True, 
+                                        executable='/bin/bash',
+                                        stdout=subprocess.PIPE, 
+                                        stderr=subprocess.PIPE,
+                                        text=True,
+                                        preexec_fn=os.setsid
+                                    )
+                                    scanner_processes.append(proc)
+                                    
                             elif action == "stop_scanner":
-                                if scanner_process is not None and scanner_process.poll() is None:
-                                    print("Stopping scanner script...")
-                                    scanner_process.terminate()
-                                    scanner_process.wait()
-                                    scanner_process = None
+                                if scanner_processes:
+                                    print("Stopping all scanner scripts...")
+                                    for proc in scanner_processes:
+                                        # Kill the entire process group to ensure ROS child nodes die
+                                        if proc.poll() is None:
+                                            try:
+                                                os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
+                                                proc.wait(timeout=2)
+                                            except Exception as e:
+                                                print(f"Error terminating process: {e}")
+                                    
+                                    # Clear the list so they can be started again
+                                    scanner_processes.clear()
+                                    print("All scanner processes stopped.")
+
                     except json.JSONDecodeError:
                         print("Received malformed JSON")
         except websockets.exceptions.ConnectionClosed:
             pass
+        
         finally:
-            # Cleanup process if the client unexpectedly disconnects
-            if scanner_process is not None and scanner_process.poll() is None:
-                scanner_process.terminate()
+            # Cleanup processes if the client unexpectedly disconnects
+            if scanner_processes:
+                print("Client disconnected. Cleaning up scanner processes...")
+                for proc in scanner_processes:
+                    if proc.poll() is None:
+                        try:
+                            # Use killpg to ensure the shell and all child ROS nodes are terminated
+                            os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
+                            proc.wait(timeout=2)
+                        except Exception as e:
+                            print(f"Error terminating process during cleanup: {e}")
+                
+                # Clear the list so it's fresh for the next connection
+                scanner_processes.clear()
 
     # Run both loops concurrently
     send_task = asyncio.create_task(send_data_loop())
@@ -157,21 +218,6 @@ async def handler(websocket):
         task.cancel()
         
     print("Client disconnected.")
-
-"""
-async def handler(websocket): 
-    print(f"Client connected from {websocket.remote_address}")
-    while True: 
-        try:
-            msg = ws_msg_queue.get_nowait() 
-            await websocket.send(msg)
-            await asyncio.sleep(0.01) 
-        except queue.Empty:
-            await asyncio.sleep(0.01)
-        except websockets.exceptions.ConnectionClosed:
-            print("Client disconnected.")
-            break
-"""
 
 async def ws_main():
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)

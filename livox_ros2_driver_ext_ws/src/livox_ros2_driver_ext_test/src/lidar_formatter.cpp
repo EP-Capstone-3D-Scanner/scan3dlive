@@ -68,6 +68,9 @@ class LidarFormatter : public rclcpp::Node
 
       // auto current_time = this->now();
       // msg_out.header.stamp = current_time;
+      // msg_out.linear_acceleration.x *= 9.80665;
+      // msg_out.linear_acceleration.y *= 9.80665;
+      // msg_out.linear_acceleration.z *= 9.80665;
       
       publisher_imu_->publish(msg_out);
       // RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg.data.c_str());

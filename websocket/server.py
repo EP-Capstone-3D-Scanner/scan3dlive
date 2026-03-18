@@ -165,8 +165,8 @@ async def handler(websocket):
                                             scanner_commands[i], 
                                             shell=True, 
                                             executable='/bin/bash',
-                                            stdout=subprocess.PIPE, 
-                                            stderr=subprocess.PIPE,
+                                            stdout=None, 
+                                            stderr=None,
                                             text=True,
                                             preexec_fn=os.setsid # Groups processes so ROS launches can be killed cleanly
                                         )
@@ -182,8 +182,8 @@ async def handler(websocket):
                                         scanner_commands[4], 
                                         shell=True, 
                                         executable='/bin/bash',
-                                        stdout=subprocess.PIPE, 
-                                        stderr=subprocess.PIPE,
+                                        stdout=None, 
+                                        stderr=None,
                                         text=True,
                                         preexec_fn=os.setsid
                                     )

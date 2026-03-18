@@ -49,16 +49,26 @@ fast_calib:
     # k2: 0.0344855
     # p1: 0.000147432
     # p2: 3.35602e-05
-    #Zed 2i 4k Right
-    fx: 1063.07
-    fy: 1062.86
-    cx: 1081.00 #1127.00
-    cy: 608.893 #633.107
+    #Zed 2i 2k Right
+    # fx: 1063.07
+    # fy: 1062.86
+    # cx: 1081.00 #1127.00
+    # cy: 608.893 #633.107
+    # k1: -0.0596335
+    # k2: 0.0344855
+    # p1: 0.000147432
+    # p2: 3.35602e-05
+    # k3: -0.0132504
+    #Zed 2i 720p Right
+    fx: 531.535
+    fy: 531.43
+    cx: 630.0 # 650.0
+    cy: 355.4465 # 364.5535
     k1: -0.0596335
     k2: 0.0344855
     p1: 0.000147432
     p2: 3.35602e-05
-    k3: -0.0132504
+    # k3: -0.0132504
 
     # Calibration target parameters
     marker_size: 0.160 # ArUco marker size (our test data uses 0.16m; adjust to match your marker size)

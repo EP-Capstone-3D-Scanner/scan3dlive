@@ -6,8 +6,8 @@
       frame_id: "camera"
       pixel_format: "yuyv"  # see usb_cam/supported_formats for list of supported formats
       av_device_format: "YUV422P"
-      image_width: 4416
-      image_height: 1242
+      image_width: 2560
+      image_height: 720
       camera_name: "test_camera"
       camera_info_url: "package://usb_cam/config/camera_info.yaml"
       brightness: -1

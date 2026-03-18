@@ -33,9 +33,14 @@ def generate_launch_description():
     node_params = params_config['fast_calib']['ros__parameters']
 
     # Load bag and image
-    bag_path = PathJoinSubstitution([pkg_share, 'calib_data', 
+    # bag_path = PathJoinSubstitution([pkg_share, 'calib_data', 
+    #     node_params.get('bag_path')])
+    # image_path = PathJoinSubstitution([pkg_share, 'calib_data', 
+    #     node_params.get('image_path')])
+    # output_path = node_params.get('output_path')
+    bag_path = PathJoinSubstitution(['/scan3dlive/fast-calib_ws/src/fast_calib_test/', 'calib_data', 
         node_params.get('bag_path')])
-    image_path = PathJoinSubstitution([pkg_share, 'calib_data', 
+    image_path = PathJoinSubstitution(['/scan3dlive/fast-calib_ws/src/fast_calib_test/', 'calib_data', 
         node_params.get('image_path')])
     output_path = node_params.get('output_path')
 

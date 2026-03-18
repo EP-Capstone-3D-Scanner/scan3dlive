@@ -13,10 +13,10 @@
       extrinsic_R: [1.0, 0.0, 0.0,
                     0.0, 1.0, 0.0,
                     0.0, 0.0, 1.0]
-      Rcl: [ -0.014830,  -0.999776,  -0.015118,
-        0.016651,   0.014871,  -0.999751,
-        0.999752,  -0.015078,   0.016427]
-      Pcl: [  0.080932,  -0.079317,   0.020574]
+      Rcl: [ -0.013517,  -0.999697,  -0.020589,
+            -0.021117,   0.020871,  -0.999559,
+              0.999686,  -0.013076,  -0.021393]
+      Pcl: [  0.077956,   0.015592,   0.015328]
       # Rcl: [0.0, -1.0, 0.0,
       #       0.0, 0.0, -1.0,
       #       1.0, 0.0, 0.0
@@ -33,7 +33,7 @@
       filter_size_surf: 0.1
       lidar_type: 1 # Livox Avia LiDAR
       scan_line: 6
-      blind: 2.0
+      blind: 0.8
 
     vio:
       max_iterations: 5
@@ -44,7 +44,7 @@
       normal_en: true
       raycast_en: false
       inverse_composition_en: false
-      exposure_estimate_en: true
+      exposure_estimate_en: false
       inv_expo_cov: 0.1
 
     imu:

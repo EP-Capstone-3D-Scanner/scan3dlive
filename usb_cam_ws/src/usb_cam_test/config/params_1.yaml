@@ -8,6 +8,8 @@
       av_device_format: "YUV422P"
       image_width: 2560
       image_height: 720
+      # image_width: 4416
+      # image_height: 1242
       camera_name: "test_camera"
       camera_info_url: "package://usb_cam/config/camera_info.yaml"
       brightness: -1

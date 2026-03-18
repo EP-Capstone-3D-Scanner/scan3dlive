@@ -24,7 +24,7 @@ class ImageGrabber(Node):
         
         try:
             # 1. Try standard 8-bit conversion, requesting rgb8 to fix the color swap
-            cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
+            cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
         except Exception as e:
             self.get_logger().warn(f'bgr8 conversion failed: {e}. Trying passthrough...')
             # 2. Fallback for non-standard, depth, or monochrome images

@@ -28,7 +28,7 @@ import numpy as np
 class Scan3DLiveNode(Node): 
     def __init__(self): 
         super().__init__('scan3dliveui') 
-        print("Scan3DLiveNode initialized, subscribing to /livox/lidar") 
+        print("Scan3DLiveNode initialized, subscribing to /cloud_registered") 
         self.sub = self.create_subscription(
             PointCloud2, 
             '/cloud_registered', 
@@ -165,8 +165,8 @@ async def handler(websocket):
                                             scanner_commands[i], 
                                             shell=True, 
                                             executable='/bin/bash',
-                                            stdout=None, 
-                                            stderr=None,
+                                            stdout=subprocess.DEVNULL, 
+                                            stderr=subprocess.DEVNULL,
                                             text=True,
                                             preexec_fn=os.setsid # Groups processes so ROS launches can be killed cleanly
                                         )
@@ -182,8 +182,8 @@ async def handler(websocket):
                                         scanner_commands[4], 
                                         shell=True, 
                                         executable='/bin/bash',
-                                        stdout=None, 
-                                        stderr=None,
+                                        stdout=subprocess.DEVNULL, 
+                                        stderr=subprocess.DEVNULL,
                                         text=True,
                                         preexec_fn=os.setsid
                                     )

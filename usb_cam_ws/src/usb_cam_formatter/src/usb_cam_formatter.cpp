@@ -21,8 +21,8 @@ public:
 private:
   void image_callback(const sensor_msgs::msg::Image::SharedPtr msg) const {
     try {
-      // Convert ROS Image message to OpenCV image
-      cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg, msg->encoding);
+      // FORCE incoming image to BGR8 so OpenCV processes it correctly
+      cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg, "bgr8");
 
       // Define Region of Interest (ROI) for cropping the right half
       int half_width = cv_ptr->image.cols / 2;
@@ -31,12 +31,16 @@ private:
       // Crop the image
       cv::Mat cropped_img = cv_ptr->image(roi);
       
-      // --- NEW: Rotate the cropped image 180 degrees ---
+      // Rotate the cropped image 180 degrees
       cv::Mat rotated_img;
       cv::rotate(cropped_img, rotated_img, cv::ROTATE_180);
       
-      // Convert back to ROS Image message and publish the rotated image
-      auto out_msg = cv_bridge::CvImage(msg->header, msg->encoding, rotated_img).toImageMsg();
+      // --- NEW: Fix the Yellow/Cyan color swap (Swap BGR to RGB) ---
+      cv::Mat color_fixed_img;
+      cv::cvtColor(rotated_img, color_fixed_img, cv::COLOR_BGR2RGB);
+      
+      // Convert back to ROS Image message and EXPLICITLY publish as "rgb8"
+      auto out_msg = cv_bridge::CvImage(msg->header, "rgb8", color_fixed_img).toImageMsg();
       publisher_->publish(*out_msg);
 
     } catch (cv_bridge::Exception& e) {

@@ -79,8 +79,8 @@ fast_calib:
     # Input
     lidar_topic: "/livox/lidar" # /ouster/points /livox/lidar
     # bag and image paths relative to calib_data folder
-    bag_path: "rosbag2_2026_03_17-00_13_01" # use folder name instead of path
-    image_path: "snapshot_20260317_001236.png" # use file name instead of path
+    bag_path: "rosbag2_2026_03_18-00_31_33" # use folder name instead of path
+    image_path: "snapshot_20260318_003210.png" # use file name instead of path
 
     # Output
     output_path: "/scan3dlive/fast-calib_ws/src/fast_calib_test/output/" # folder path relative to package

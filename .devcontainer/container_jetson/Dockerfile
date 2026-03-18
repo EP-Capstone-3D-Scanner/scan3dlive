@@ -116,6 +116,12 @@ COPY ./rosdep_keys /tmp/scan3dlive_rosdep_keys
 RUN set -ex; \
     rosdep install --from-paths /tmp/scan3dlive_rosdep_keys -y --ignore-src
 
+RUN set -ex; \
+    sudo apt-get update && sudo apt-get install -y \
+    ros-humble-rmw-cyclonedds-cpp \
+    && sudo rm -rf /var/lib/apt/lists/*
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
 # Expose port 8001 
 EXPOSE 8001
 

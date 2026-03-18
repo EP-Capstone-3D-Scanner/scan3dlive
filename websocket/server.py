@@ -82,7 +82,7 @@ class Scan3DLiveNode(Node):
             
         end_time = time.perf_counter()
         elapsed_time = end_time - start_time
-        print(f"Execution time: {elapsed_time:.4f} seconds")
+        #print(f"Execution time: {elapsed_time:.4f} seconds")
 
 
 async def handler(websocket): 
@@ -101,15 +101,37 @@ async def handler(websocket):
 
 
 
+    MAX_PAYLOAD_BYTES = 1024 * 512  # 1024 KB target max size (tune as needed)
+
     async def send_data_loop():
         while True:
             await client_ready.wait() # Block until UI sends an ACK
+            
             try:
-                msg = ws_msg_queue.get_nowait() 
-                await websocket.send(msg)
-                client_ready.clear() # Clear the flag to block until the next ACK
-            except queue.Empty:
-                await asyncio.sleep(0.01)
+                # Wait until there is at least ONE message in the queue
+                while ws_msg_queue.empty():
+                    await asyncio.sleep(0.01)
+                    
+                payload = bytearray()
+                
+                # Drain the queue to build a larger batched chunk
+                while not ws_msg_queue.empty():
+                    try:
+                        msg = ws_msg_queue.get_nowait()
+                        payload.extend(msg)
+                        
+                        # Stop pulling from queue if we reach our target size
+                        # (It's okay if the final message pushes it slightly over the limit)
+                        if len(payload) >= MAX_PAYLOAD_BYTES:
+                            break
+                    except queue.Empty:
+                        break
+                
+                # Send the batched payload
+                if payload:
+                    await websocket.send(payload)
+                    client_ready.clear() # Block until the next ACK
+                    
             except websockets.exceptions.ConnectionClosed:
                 break
 
@@ -119,6 +141,7 @@ async def handler(websocket):
 
         try:
             async for message in websocket:
+                print(ws_msg_queue.qsize())
                 if isinstance(message, str): # Commands and ACKs will be text/JSON
                     try:
                         data = json.loads(message)

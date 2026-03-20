@@ -17,7 +17,7 @@ def generate_launch_description():
 
     #Load parameters
     avia_config_cmd = os.path.join(config_file_dir, "avia_bag.yaml")
-    camera_config_cmd = os.path.join(config_file_dir, "camera_pinhole.yaml")
+    camera_config_cmd = os.path.join(config_file_dir, "camera_pinhole_bag.yaml")
 
     # Param use_rviz
     use_rviz_arg = DeclareLaunchArgument(

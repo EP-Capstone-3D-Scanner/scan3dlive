@@ -31,15 +31,16 @@ fast_calib:
     # p1: -0.000731746350601389
     # p2: -0.000201478932371979
 
-    # Zed 2i Left
+    # Zed 2i 2k Left
     # fx: 1063.32
     # fy: 1063.34
-    # cx: 980.66
-    # cy: 580.628
+    # cx: 1083.34 # 1124.66
+    # cy: 580.372 # 661.628
     # k1: -0.0712496
     # k2: 0.0551279
     # p1: -0.000250596
     # p2: 0.000467508
+    # k3: -0.0227127
     #Zed 2i Right
     # fx: 1063.07
     # fy: 1062.86
@@ -58,7 +59,7 @@ fast_calib:
     k2: 0.0344855
     p1: 0.000147432
     p2: 3.35602e-05
-    # k3: -0.0132504
+    k3: -0.0132504
     #Zed 2i 720p Right
     # fx: 531.535
     # fy: 531.43
@@ -79,18 +80,18 @@ fast_calib:
     circle_radius: 0.080 # Radius of the circle 
 
     # Distance filter
-    x_min: 1.5
-    x_max: 3.5
-    y_min: -0.5
-    y_max: 0.6
-    z_min: -0.5 # avia and mid360: -0.5 ouster: -0.8
-    z_max: 2.0
+    x_min: 2.6415900707244873 #1.5
+    x_max: 2.7415900707244873 #3.5
+    y_min: -0.4004124701023102 #-0.5
+    y_max: 0.4773142635822296 #0.6
+    z_min: -0.45130184292793274 #-0.5 # avia and mid360: -0.5 ouster: -0.8
+    z_max: 0.11623066663742065
 
     # Input
     lidar_topic: "/livox/lidar" # /ouster/points /livox/lidar
     # bag and image paths relative to calib_data folder
-    bag_path: "rosbag2_2026_03_18-22_23_27" # use folder name instead of path
-    image_path: "snapshot_20260318_222357.png" # use file name instead of path
+    bag_path: "rosbag2_2026_03_18-21_46_20" # use folder name instead of path
+    image_path: "snapshot_20260318_215400.png" # use file name instead of path
 
     # Output
     output_path: "/scan3dlive/fast-calib_ws/src/fast_calib_test/output/" # folder path relative to package

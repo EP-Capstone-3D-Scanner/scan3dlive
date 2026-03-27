@@ -1,7 +1,6 @@
 import rclpy 
 from rclpy.node import Node 
 from rclpy.qos import qos_profile_sensor_data 
-from livox_interfaces.msg import CustomMsg
 from sensor_msgs.msg import PointCloud2
 import sensor_msgs_py.point_cloud2 as pc2
 import asyncio 
@@ -38,7 +37,7 @@ class Scan3DLiveNode(Node):
     
     def callback(self, msg):
         start_time = time.perf_counter()
-        
+        #print("ran")
         try:
             points = pc2.read_points(msg, field_names=("x", "y", "z", "rgb"), skip_nans=True)
             
@@ -101,7 +100,7 @@ async def handler(websocket):
 
 
 
-    MAX_PAYLOAD_BYTES = 1024 * 512  # 1024 KB target max size (tune as needed)
+    MAX_PAYLOAD_BYTES = 512 * 1024  # 1024 KB target max size (tune as needed)
 
     async def send_data_loop():
         while True:
@@ -182,8 +181,8 @@ async def handler(websocket):
                                         scanner_commands[4], 
                                         shell=True, 
                                         executable='/bin/bash',
-                                        stdout=subprocess.DEVNULL, 
-                                        stderr=subprocess.DEVNULL,
+                                        stdout= subprocess.DEVNULL, #None
+                                        stderr= subprocess.DEVNULL, #None
                                         text=True,
                                         preexec_fn=os.setsid
                                     )
@@ -249,7 +248,7 @@ async def ws_main():
     
     print("Starting secure websocket (WSS) handler thread on wss://0.0.0.0:8001...") 
     
-    async with websockets.serve(handler, '0.0.0.0', 8001, ssl=ssl_context) as server: 
+    async with websockets.serve(handler, '0.0.0.0', 8001, ssl=ssl_context, max_size= 2 * 1024 * 1024) as server: 
         await server.serve_forever() 
 
 def handle_ws_thread(): 

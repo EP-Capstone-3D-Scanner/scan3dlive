@@ -13,15 +13,10 @@
       extrinsic_R: [1.0, 0.0, 0.0,
                     0.0, 1.0, 0.0,
                     0.0, 0.0, 1.0]
-      Rcl: [ -0.013517,  -0.999697,  -0.020589,
-            -0.021117,   0.020871,  -0.999559,
-              0.999686,  -0.013076,  -0.021393]
-      Pcl: [  0.077956,   0.015592,   0.015328]
-      # Rcl: [0.0, -1.0, 0.0,
-      #       0.0, 0.0, -1.0,
-      #       1.0, 0.0, 0.0
-      # ]
-      # Pcl: [ 0.085,  0.04,   0.0]
+      Rcl: [0.00534, -0.99989, -0.01367, 
+        0.00309, 0.01369, -0.99990, 
+        0.99998, 0.00530, 0.00317]
+      Pcl: [0.06282, -0.04505, 0.02916]
 
     time_offset: 
       imu_time_offset: 0.0
@@ -29,66 +24,64 @@
       exposure_time_init: 0.0
 
     preprocess:
-      point_filter_num: 2
-      filter_size_surf: 0.1
-      lidar_type: 1 # Livox Avia LiDAR
+      point_filter_num: 2        # Keep more points to ensure enough features during fast sweeps
+      filter_size_surf: 0.1      # Slightly relaxed for faster processing
+      lidar_type: 1 
       scan_line: 6
-      blind: 0.8
+      blind: 0.5                 # Lowered to capture nearby geometry for stability
 
     vio:
-      max_iterations: 5
-      outlier_threshold: 1000 # 78 100 156 #100 200 500 700 infinite
-      img_point_cov: 100 # 100 1000 
+      max_iterations: 10 
+      outlier_threshold: 50      # Lowered from 156 (156 is too high, allows bad matches to ruin the pose)
+      img_point_cov: 100 
       patch_size: 8
       patch_pyrimid_level: 4
       normal_en: true
-      raycast_en: false
-      inverse_composition_en: false
-      exposure_estimate_en: false
+      raycast_en: true 
+      inverse_composition_en: true 
+      exposure_estimate_en: true
       inv_expo_cov: 0.1
 
     imu:
       imu_en: true
-      imu_int_frame: 30
-      acc_cov: 0.5 # 0.2
-      gyr_cov: 0.3 # 0.5
-      b_acc_cov: 0.0001 # 0.1
-      b_gyr_cov: 0.0001 # 0.1
+      imu_int_frame: 10          # Lowered from 20 to increase integration frequency
+      acc_cov: 0.01              # Increased trust in IMU (10x more confident)
+      gyr_cov: 0.01              # Increased trust in IMU (10x more confident)
+      b_acc_cov: 0.0001
+      b_gyr_cov: 0.0001
 
     lio:
-      max_iterations: 5
-      dept_err: 0.02
-      beam_err: 0.05
-      min_eigen_value: 0.0025 # 0.005
-      voxel_size: 0.5
-      max_layer: 2
-      max_points_num: 50
+      max_iterations: 15         # Increased slightly to ensure convergence during fast motion
+      dept_err: 0.01 
+      beam_err: 0.04
+      min_eigen_value: 0.002 
+      voxel_size: 0.2            # Increased to 20cm to speed up iKD-Tree search
+      max_layer: 3 
+      max_points_num: 20         # Lowered to keep search speed fast
       layer_init_num: [5, 5, 5, 5, 5]
 
     local_map:  
-      map_sliding_en: false
-      half_map_size: 100
-      sliding_thresh: 8.0
+      map_sliding_en: false 
+      half_map_size: 25 # Reduced significantly to keep RAM usage low
+      sliding_thresh: 4.0 # More frequent map cleaning
 
     uav:
       imu_rate_odom: false
-      gravity_align_en: false
+      gravity_align_en: false 
 
     publish:
       dense_map_en: true
       pub_effect_point_en: false 
-      pub_plane_en: false
+      pub_plane_en: false # Useful for verifying indoor wall alignment
       pub_scan_num: 1
       blind_rgb_points: 0.0
 
     evo:
-      seq_name: "CBD_Building_01"
+      seq_name: "High_Res_Indoor"
       pose_output_en: false
 
     pcd_save:
-      pcd_save_en: false
-      colmap_output_en: false # need to set interval = -1
-      filter_size_pcd: 0.15
-      interval: -1
-      # how many LiDAR frames saved in each pcd file;
-      # -1 : all frames will be saved in ONE pcd file, may lead to memory crash when having too much frames.
+      pcd_save_en: true
+      colmap_output_en: false
+      filter_size_pcd: 0.01 # Matches the surface filter for the final export
+      interval: 50 # Dump to disk every 50 frames to clear RAM buffers

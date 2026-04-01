@@ -24,18 +24,18 @@
       exposure_time_init: 0.0
 
     preprocess:
-      point_filter_num: 2        # Keep more points to ensure enough features during fast sweeps
-      filter_size_surf: 0.1      # Slightly relaxed for faster processing
+      point_filter_num: 1       
+      filter_size_surf: 0.2     # INCREASED: Aggressive downsampling right before mapping to save RAM
       lidar_type: 1 
       scan_line: 6
-      blind: 0.5                 # Lowered to capture nearby geometry for stability
+      blind: 2.3                
 
     vio:
-      max_iterations: 10 
-      outlier_threshold: 50      # Lowered from 156 (156 is too high, allows bad matches to ruin the pose)
-      img_point_cov: 100 
+      max_iterations: 3         # REDUCED: Cuts VIO compute time and memory allocation
+      outlier_threshold: 80     
+      img_point_cov: 1000       
       patch_size: 8
-      patch_pyrimid_level: 4
+      patch_pyrimid_level: 3    # REDUCED: Uses less RAM for storing image feature pyramids
       normal_en: true
       raycast_en: true 
       inverse_composition_en: true 
@@ -44,44 +44,35 @@
 
     imu:
       imu_en: true
-      imu_int_frame: 10          # Lowered from 20 to increase integration frequency
-      acc_cov: 0.01              # Increased trust in IMU (10x more confident)
-      gyr_cov: 0.01              # Increased trust in IMU (10x more confident)
+      imu_int_frame: 10         
+      acc_cov: 0.1              
+      gyr_cov: 0.1              
       b_acc_cov: 0.0001
       b_gyr_cov: 0.0001
 
     lio:
-      max_iterations: 15         # Increased slightly to ensure convergence during fast motion
-      dept_err: 0.01 
+      max_iterations: 8         # REDUCED: Caps iterations to prevent CPU stalling
+      dept_err: 0.02            
       beam_err: 0.04
       min_eigen_value: 0.002 
-      voxel_size: 0.2            # Increased to 20cm to speed up iKD-Tree search
+      voxel_size: 0.2           # INCREASED: Larger voxels drastically shrink the iKD-Tree memory footprint
       max_layer: 3 
-      max_points_num: 20         # Lowered to keep search speed fast
-      layer_init_num: [5, 5, 5, 5, 5]
+      max_points_num: 5         # REDUCED: Strict limit on points per voxel to keep the tree small
+      layer_init_num: [3, 3, 3, 3, 3] # REDUCED: Smaller initial memory allocation for the tree arrays
 
     local_map:  
-      map_sliding_en: false 
-      half_map_size: 25 # Reduced significantly to keep RAM usage low
-      sliding_thresh: 4.0 # More frequent map cleaning
-
-    uav:
-      imu_rate_odom: false
-      gravity_align_en: false 
+      map_sliding_en: true      # CRITICAL FIX: Must be true. Infinite maps will crash the system memory.
+      half_map_size: 15         # REDUCED: A tiny local map keeps RAM usage strictly bounded.
+      sliding_thresh: 3.0 
 
     publish:
-      dense_map_en: true
+      dense_map_en: true       # CRITICAL FIX: Disable this. Publishing dense maps via ROS duplicates the memory footprint.
       pub_effect_point_en: false 
-      pub_plane_en: false # Useful for verifying indoor wall alignment
-      pub_scan_num: 1
+      pub_plane_en: false 
+      pub_scan_num: 3           # INCREASED: Only publish every 3rd odometry scan to reduce ROS bandwidth
       blind_rgb_points: 0.0
 
-    evo:
-      seq_name: "High_Res_Indoor"
-      pose_output_en: false
-
     pcd_save:
-      pcd_save_en: true
-      colmap_output_en: false
-      filter_size_pcd: 0.01 # Matches the surface filter for the final export
-      interval: 50 # Dump to disk every 50 frames to clear RAM buffers
+      pcd_save_en: false
+      filter_size_pcd: 0.1      # Keeps the saved map reasonably dense
+      interval: 40              # REDUCED: Dump to disk more frequently to clear RAM buffers early

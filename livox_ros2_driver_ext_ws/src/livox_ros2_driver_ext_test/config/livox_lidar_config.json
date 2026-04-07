@@ -4,7 +4,7 @@
             "broadcast_code": "3JEDM1F001V0541",
             "enable_connect": true,
             "enable_fan": true,
-            "return_mode": 0,
+            "return_mode": 2,
             "coordinate": 0,
             "imu_rate": 1,
             "extrinsic_parameter_source": 0

@@ -127,7 +127,8 @@ async def handler(websocket):
                         break
                 
                 # Send the batched payload
-                if payload:
+                if payload and len(payload)>0:
+                    print(len(payload))
                     await websocket.send(payload)
                     client_ready.clear() # Block until the next ACK
                     

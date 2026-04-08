@@ -40,7 +40,7 @@ class Scan3DLiveNode(Node):
         #print("ran")
         try:
             points = pc2.read_points(msg, field_names=("x", "y", "z", "rgb"), skip_nans=True)
-            
+            print("Message Size [Points]: " + str(len(points)))
             if len(points) > 0:
                 
                 x = points['x']
@@ -109,7 +109,7 @@ async def handler(websocket):
             try:
                 # Wait until there is at least ONE message in the queue
                 while ws_msg_queue.empty():
-                    await asyncio.sleep(0.01)
+                    await asyncio.sleep(1)
                     
                 payload = bytearray()
                 

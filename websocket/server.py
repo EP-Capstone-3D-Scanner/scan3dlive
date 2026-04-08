@@ -112,7 +112,7 @@ async def handler(websocket):
                     await asyncio.sleep(1)
                     
                 payload = bytearray()
-                
+                print("[INIT QUEUE SIZE]:" + str(ws_msg_queue.qsize()))
                 # Drain the queue to build a larger batched chunk
                 while not ws_msg_queue.empty():
                     try:
@@ -125,7 +125,7 @@ async def handler(websocket):
                             break
                     except queue.Empty:
                         break
-                
+                print("[FINAL QUEUE SIZE]:" + str(ws_msg_queue.qsize()))
                 # Send the batched payload
                 if payload and len(payload)>0:
                     print(len(payload))
@@ -141,7 +141,6 @@ async def handler(websocket):
 
         try:
             async for message in websocket:
-                print(ws_msg_queue.qsize())
                 if isinstance(message, str): # Commands and ACKs will be text/JSON
                     try:
                         data = json.loads(message)

@@ -154,7 +154,13 @@ async def handler(websocket):
                             action = data.get("action")
                             
                             if action == "start_scanner":
-                                # Check if processes are already running (list is not empty)
+                                # Drain the queue
+                                try:
+                                    while True:
+                                        ws_msg_queue.get_nowait()
+                                        ws_msg_queue.task_done()
+                                except queue.Empty:
+                                    pass
                                 if not scanner_processes:
                                     print("Starting scanner scripts...")
                                     

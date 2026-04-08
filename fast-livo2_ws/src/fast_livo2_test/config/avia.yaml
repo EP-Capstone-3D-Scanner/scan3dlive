@@ -44,7 +44,7 @@
 
     imu:
       imu_en: true
-      imu_int_frame: 30         
+      imu_int_frame: 10         
       acc_cov: 0.1              
       gyr_cov: 0.1              
       b_acc_cov: 0.0001

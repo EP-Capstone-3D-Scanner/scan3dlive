@@ -40,6 +40,15 @@ class Scan3DLiveNode(Node):
         #print("ran")
         try:
             points = pc2.read_points(msg, field_names=("x", "y", "z", "rgb"), skip_nans=True)
+            
+            # --- NEW: Enforce a strict maximum point limit ---
+            MAX_POINTS_PER_MSG = 50000 
+            if len(points) > MAX_POINTS_PER_MSG:
+                # Randomly select indices without replacement (very fast in numpy)
+                indices = np.random.choice(len(points), MAX_POINTS_PER_MSG, replace=False)
+                points = points[indices]
+            # -------------------------------------------------
+
             print("Message Size [Points]: " + str(len(points)))
             if len(points) > 0:
                 
@@ -109,7 +118,7 @@ async def handler(websocket):
             try:
                 # Wait until there is at least ONE message in the queue
                 while ws_msg_queue.empty():
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(0.01)
                     
                 payload = bytearray()
                 print("[INIT QUEUE SIZE]:" + str(ws_msg_queue.qsize()))

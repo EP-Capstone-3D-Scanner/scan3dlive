@@ -56,7 +56,7 @@
       b_gyr_cov: 0.0001 # 0.1
 
     lio:
-      max_iterations: 5
+      max_iterations: 8
       dept_err: 0.02
       beam_err: 0.05
       min_eigen_value: 0.0025 # 0.005
@@ -78,7 +78,7 @@
       dense_map_en: true
       pub_effect_point_en: false 
       pub_plane_en: false
-      pub_scan_num: 1
+      pub_scan_num: 10
       blind_rgb_points: 0.0
 
     evo:

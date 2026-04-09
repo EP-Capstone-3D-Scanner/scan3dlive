@@ -17,6 +17,11 @@
         0.00309, 0.01369, -0.99990, 
         0.99998, 0.00530, 0.00317]
       Pcl: [0.06282, -0.04505, 0.02916]
+      # Rcl: [0.0, -1.0, 0.0,
+      #       0.0, 0.0, -1.0,
+      #       1.0, 0.0, 0.0
+      # ]
+      # Pcl: [ 0.085,  0.04,   0.0]
 
     time_offset: 
       imu_time_offset: 0.0
@@ -25,54 +30,65 @@
 
     preprocess:
       point_filter_num: 1
-      filter_size_surf: 0.2     # INCREASED: Aggressive downsampling right before mapping to save RAM
-      lidar_type: 1 
+      filter_size_surf: 0.1
+      lidar_type: 1 # Livox Avia LiDAR
       scan_line: 6
-      blind: 2.3                
+      blind: 2.3
 
     vio:
-      max_iterations: 3         # REDUCED: Cuts VIO compute time and memory allocation
-      outlier_threshold: 80     
-      img_point_cov: 1000       
+      max_iterations: 5
+      outlier_threshold: 80 # 78 100 156 #100 200 500 700 infinite
+      img_point_cov: 100 # 100 1000 
       patch_size: 8
-      patch_pyrimid_level: 3    # REDUCED: Uses less RAM for storing image feature pyramids
+      patch_pyrimid_level: 4
       normal_en: true
-      raycast_en: true 
-      inverse_composition_en: true 
-      exposure_estimate_en: true
+      raycast_en: false
+      inverse_composition_en: false
+      exposure_estimate_en: false
       inv_expo_cov: 0.1
 
     imu:
       imu_en: true
-      imu_int_frame: 20         
-      acc_cov: 0.1              
-      gyr_cov: 0.1              
-      b_acc_cov: 0.0001
-      b_gyr_cov: 0.0001
+      imu_int_frame: 30
+      acc_cov: 0.5 # 0.2
+      gyr_cov: 0.3 # 0.5
+      b_acc_cov: 0.0001 # 0.1
+      b_gyr_cov: 0.0001 # 0.1
 
     lio:
-      max_iterations: 8         # REDUCED: Caps iterations to prevent CPU stalling
-      dept_err: 0.02            
-      beam_err: 0.04
-      min_eigen_value: 0.002 
-      voxel_size: 0.2           # INCREASED: Larger voxels drastically shrink the iKD-Tree memory footprint
-      max_layer: 3 
-      max_points_num: 5         # REDUCED: Strict limit on points per voxel to keep the tree small
-      layer_init_num: [3, 3, 3, 3, 3] # REDUCED: Smaller initial memory allocation for the tree arrays
+      max_iterations: 5
+      dept_err: 0.02
+      beam_err: 0.05
+      min_eigen_value: 0.0025 # 0.005
+      voxel_size: 0.5
+      max_layer: 2
+      max_points_num: 50
+      layer_init_num: [5, 5, 5, 5, 5]
 
     local_map:  
-      map_sliding_en: true      # CRITICAL FIX: Must be true. Infinite maps will crash the system memory.
-      half_map_size: 15         # REDUCED: A tiny local map keeps RAM usage strictly bounded.
-      sliding_thresh: 3.0 
+      map_sliding_en: false
+      half_map_size: 100
+      sliding_thresh: 8.0
+
+    uav:
+      imu_rate_odom: false
+      gravity_align_en: false
 
     publish:
-      dense_map_en: true       # CRITICAL FIX: Disable this. Publishing dense maps via ROS duplicates the memory footprint.
+      dense_map_en: true
       pub_effect_point_en: false 
-      pub_plane_en: false 
-      pub_scan_num: 3           # INCREASED: Only publish every 3rd odometry scan to reduce ROS bandwidth
+      pub_plane_en: false
+      pub_scan_num: 1
       blind_rgb_points: 0.0
+
+    evo:
+      seq_name: "CBD_Building_01"
+      pose_output_en: false
 
     pcd_save:
       pcd_save_en: false
-      filter_size_pcd: 0.1      # Keeps the saved map reasonably dense
-      interval: 40              # REDUCED: Dump to disk more frequently to clear RAM buffers early
+      colmap_output_en: false # need to set interval = -1
+      filter_size_pcd: 0.15
+      interval: -1
+      # how many LiDAR frames saved in each pcd file;
+      # -1 : all frames will be saved in ONE pcd file, may lead to memory crash when having too much frames.
